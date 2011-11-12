@@ -18,10 +18,10 @@ switch($_GET["type"]){
         die("Unknown preview type.");
 }
 
-$max_value=0;
-$line_num= -1;
-$data = array();
-$info = array();
+$max_value = 0;
+$line_num  = -1;
+$data      = array();
+$info      = array();
 
 while (!feof ($file)) {
     $line = fgets ($file);
@@ -38,7 +38,8 @@ while (!feof ($file)) {
             $line_data = preg_split("/[|]+/", $line);
             foreach($line_data as $value)
             {
-                if ($value > $max_value)
+                $value = trim($value);
+                if ((is_numeric($value)) && ($value > $max_value))
                 {
                     $max_value = $value;
                 }
@@ -72,7 +73,7 @@ else
 {
     require "overview.php";
     $overview = new Overview();
-    $overview->main();
+    $overview->main($max_value);
 }
 
 fclose($file);

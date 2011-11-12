@@ -38,7 +38,7 @@ class Overview
         );
     }
 
-    function main()
+    function main($max_value)
     {
         header("Content-Type: image/jpeg");
         $cell_border = 2;
@@ -90,9 +90,9 @@ class Overview
         imagestring($this->im, 2, $canvas_x_offset+$canvas_x_size+(2*$palette_offset)+$cell_size+(2*$cell_border),
                      0+$canvas_y_offset, "0", $col_black);
         imagestring($this->im, 2, $canvas_x_offset+$canvas_x_size+(2*$palette_offset)+$cell_size+(2*$cell_border),
-                     0+$canvas_y_offset+(12*$cell_size)+(12*$cell_border), "mid", $col_black);
+                     0+$canvas_y_offset+(12*$cell_size)+(12*$cell_border), floor($max_value/2), $col_black);
         imagestring($this->im, 2, $canvas_x_offset+$canvas_x_size+(2*$palette_offset)+$cell_size+(2*$cell_border),
-                     0+$canvas_y_offset+(23*$cell_size)+(23*$cell_border), "max", $col_black);
+                     0+$canvas_y_offset+(23*$cell_size)+(23*$cell_border), $max_value, $col_black);
     
     
         // canvas cells
