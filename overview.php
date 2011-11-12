@@ -3,6 +3,7 @@ class Overview
 {
     // properties
     public $im;
+    public $data;
 
     function get_color_palete()
     {
@@ -40,15 +41,16 @@ class Overview
 
     function main($max_value)
     {
-        header("Content-Type: image/jpeg");
-        $cell_border = 2;
-        $cell_size=8;
+        $cell_border     = 2;
+        $cell_size       = 8;
         $canvas_x_offset = $canvas_y_offset = 20;
         $canvas_x_size   = (31*$cell_size)+(32*$cell_border);
         $canvas_y_size   = (24*$cell_size)+(25*$cell_border);
         $this->im = @imagecreate($canvas_x_offset + $canvas_x_size + 100,
                     $canvas_y_offset + $canvas_y_size + 100)
                 or die("Cannot Initialize new GD image stream");
+
+        header("Content-Type: image/jpeg");
 
         $col_white = imagecolorallocate($this->im, 255, 255, 255);
         $col_black = imagecolorallocate($this->im, 0, 0, 0);
@@ -104,13 +106,52 @@ class Overview
             for($y=0;$y<24;$y++)
             {
                 $y_pos = $y_pos + $cell_border;
-                imagefilledrectangle($this->im, $x_pos, $y_pos,$x_pos+$cell_size, $y_pos+$cell_size, $col_white);
+                $cell_color = $col_black;
+                if (array_key_exists($x, $this->data))
+                {
+                    if (array_key_exists($y, $this->data[$x]))
+                    {
+                        $index = floor(($this->data[$x][$y]/$max_value)*23);
+                        $cell_color = $color_palette[$index];
+                    }
+                }
+                imagefilledrectangle($this->im, $x_pos, $y_pos,$x_pos+$cell_size, $y_pos+$cell_size, $cell_color);
                 $y_pos = $y_pos + $cell_size;
             }
             $x_pos = $x_pos + $cell_size;
         }
         imagejpeg($this->im);
         imagedestroy($this->im);
+    }
+
+    function import($imported_data)
+    {
+        $this->data = array();
+        foreach($imported_data as $line)
+        {
+            $a_line = array();
+            $array_line = preg_split("/[|]+/", $line);
+            // remove first element (daynumber)
+            $array_line = array_slice($array_line, 1);
+            $find_number = 0;
+            foreach($array_line as $value)
+            {
+                $value = trim($value);
+                if (is_numeric($value))
+                {
+                    $find_number = 1;
+                }
+                else
+                {
+                    $value = 0;
+                }
+                array_push($a_line, $value);
+            }
+            if ($find_number)
+            {
+                array_push($this->data, $a_line);
+            }
+        }
     }
 }
 ?>

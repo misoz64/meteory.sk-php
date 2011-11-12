@@ -73,6 +73,7 @@ else
 {
     require "overview.php";
     $overview = new Overview();
+    $overview->import($data);
     $overview->main($max_value);
 }
 
