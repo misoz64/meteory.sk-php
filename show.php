@@ -68,6 +68,12 @@ if ($show_daily_report)
         }
     }
 }
+else
+{
+    require "overview.php";
+    $overview = new Overview();
+    $overview->main();
+}
 
 fclose($file);
 ?>
