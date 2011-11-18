@@ -1,7 +1,8 @@
 <?
 error_reporting(E_STRICT|E_ALL);
 //$file = fopen("http://radio.data.free.fr/live_datas/Vsetin_112011rmob.TXT", 'r');
-$file = fopen("Vsetin_112011rmob.TXT", 'r');
+//defined($_GET["file"]) or die("Filename must be selected");
+$file = fopen($_GET["file"], 'r');
 if (!$file) {
     echo "<p>Unable to open remote file.\n";
     exit;
